@@ -3,6 +3,7 @@ const card_up = document.getElementById('card_up')
 let fragment = document.createDocumentFragment()
 
 const actual_date = Date.parse(data.currentDate)
+console.log(actual_date)
 
 for (let element of data.events) {
 
