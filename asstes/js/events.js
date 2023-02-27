@@ -1,16 +1,14 @@
-console.log(data)
 const card_pas = document.getElementById('card_pas')
 
 let fragment = document.createDocumentFragment()
 
-const fechaActual = Date.parse(data.currentDate)
-
+const actual_date = Date.parse(data.currentDate)
 
 for (let element of data.events) {
 
-let fechasFuturas = Date.parse(element.date)
+let past_events = Date.parse(element.date)
 
-    if (fechasFuturas < fechaActual) {
+    if (past_events < actual_date) {
 
         let div = document.createElement('div')
         div.classList.add("card")

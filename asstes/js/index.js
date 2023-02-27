@@ -18,5 +18,3 @@ for(let element of data.events)
 }
 card_index.appendChild(fragment)
 
-
-// new Date
