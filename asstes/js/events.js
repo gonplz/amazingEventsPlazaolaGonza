@@ -1,5 +1,4 @@
 const card_pas = document.getElementById('card_pas')
-
 let fragment = document.createDocumentFragment()
 
 const actual_date = Date.parse(data.currentDate)
