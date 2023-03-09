@@ -1,4 +1,3 @@
-
 let past_events = data.events.filter(elemento => Date.parse(elemento.date) < Date.parse(data.currentDate))
 console.log(past_events)
 
@@ -33,9 +32,9 @@ function showCard(listCards, container) {
     }
 }
 
-const category_nav = document.getElementById('container_nav_down')
+const category_nav = document.getElementById('category_nav')
 
-category_nav.appendChild(checkbox(data.events))
+category_nav.appendChild(checkbox(past_events))
 
 function checkbox(array) {
 
