@@ -7,7 +7,7 @@ console.log(actual_date)
 
 for (let element of data.events) {
 
-let up_coming = Date.parse(element.date)
+    let up_coming = Date.parse(element.date)
 
     if (up_coming > actual_date) {
 
@@ -19,7 +19,7 @@ let up_coming = Date.parse(element.date)
                      <h5 class="card-title title_card">${element.name}</h5>
                     <p class="card-text">${element.description}</p>
                     <p>Price: ${element.price} U$D</p>
-                     <a href="./details.html" class="navega1">View More</a>
+                    <a href="./details.html?id=${element._id}" class="navega1">View More</a>
                  </div>`
         fragment.appendChild(div)
     }
