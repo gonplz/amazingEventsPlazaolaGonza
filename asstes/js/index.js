@@ -1,8 +1,44 @@
-const card_index = document.getElementById('card_index')
+let urlApi = " https://mindhub-xj03.onrender.com/api/amazing"
 
-showCard(data.events, card_index)
+fetch(urlApi)
+
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        
+        //Traje los contenedores, las llamadas de las funciones y las variables gobales que pasaron a ser locales aca dentro
+
+        const card_index = document.getElementById('card_index')
+        showCard(data.events, card_index)
+
+        const category_nav = document.getElementById('category_nav')
+        category_nav.appendChild(checkbox(data.events))
+
+        //Checkbox, variables, evento escucha y las llamadas
+        let inputsChequeados = []
+        let checkboxes = document.querySelectorAll('input[type=checkbox]')
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => { // trasnforme la funcion verificarChekeados en funcion flecha para utilizar las variables que eran globales, que haora osn locales dentro del fetch(then del json)
+                inputsChequeados = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id)
+                console.log(inputsChequeados)
+                filterCruzade(data.events,inputsChequeados, stringSearch)
+            })
+        })
+        //Search, variables, evento escuha y las llamadas
+        let stringSearch = ""
+        const search_input = document.getElementById("search_input")
+        search_input.addEventListener('keyup', () => {
+            stringSearch = search_input.value
+            filterCruzade(data.events, inputsChequeados, stringSearch)
+        })
+    })
+    .catch(error => console.log(error))
+
+
+    //Funciones..........................
 
 function showCard(listCards, container) {
+
     container.innerHTML = ''
 
     if (listCards.length > 0) {
@@ -29,72 +65,47 @@ function showCard(listCards, container) {
     }
 }
 
-    const category_nav = document.getElementById('category_nav')
+//Checkboxes.................
+function checkbox(array) {
 
-    category_nav.appendChild(checkbox(data.events))
+    let arrayCate = []
 
-    function checkbox(array) {
+    for (let elemento of array) {
 
-        let arrayCate = []
+        let categorias = elemento.category
+        arrayCate.push(categorias)
+    }
 
-        for (let elemento of array) {
+    let result = arrayCate.filter((item, index) => {
+        return arrayCate.indexOf(item) === index;
+    })
 
-            let categorias = elemento.category
-            arrayCate.push(categorias)
-        }
+    let fragmentCheck = document.createDocumentFragment()
 
-        let result = arrayCate.filter((item, index) => {
-            return arrayCate.indexOf(item) === index;
-        })
-
-        let fragmentCheck = document.createDocumentFragment()
-
-        for (let cate of result) {
-            let li = document.createElement('li')
-            li.innerHTML = `<label><input type="checkbox" name="categorias" id=${cate.split(" ").join("_")}> ${cate}
+    for (let cate of result) {
+        let li = document.createElement('li')
+        li.innerHTML = `<label><input type="checkbox" name="categorias" id=${cate.split(" ").join("_")}> ${cate}
             </label>`
-            fragmentCheck.appendChild(li)
-        }
-        return fragmentCheck
+        fragmentCheck.appendChild(li)
     }
+    return fragmentCheck
+}
 
-    let inputsChequeados = []
+function filterArray(arrayString, listCards) {
+    if (arrayString.length == 0) return listCards
+    return listCards.filter(elemento => arrayString.includes(elemento.category.replace(" ", "_")))
+}
 
-    let checkboxes = document.querySelectorAll('input[type=checkbox]')
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', verificarSeleccion)
-    })
+// Search................................................
 
-    function verificarSeleccion() {
-        inputsChequeados = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id)
-        console.log(inputsChequeados)
-        filterCruzade(data.events)
-    }
-    function filterArray(arrayString, listCards) {
-        if (arrayString.length == 0) return listCards
-        return listCards.filter(elemento => arrayString.includes(elemento.category.replace(" ", "_")))
-    }
+function filterString(string, listCards) {
+    if (string == "") return listCards
+    return listCards.filter(elemento => elemento.name.toLowerCase().includes(string.toLowerCase().trim()))
+}
 
-    // SREEEEEAAAAAACHHHHHHHH................................................
+function filterCruzade(listCards, inputsChequeados, stringSearch) {
+    let arrayFilterCheck = filterArray(inputsChequeados, listCards)
+    let arrayFilterString = filterString(stringSearch, arrayFilterCheck)
 
-    let stringSearch = ""
-
-    const search_input = document.getElementById("search_input")
-    console.log(search_input)
-
-    search_input.addEventListener('keyup', () => {
-        stringSearch = search_input.value
-        filterCruzade(data.events)
-    })
-
-    function filterString(string, listCards) {
-        if (string == "") return listCards
-        return listCards.filter(elemento => elemento.name.toLowerCase().includes(string.toLowerCase().trim()))
-    }
-
-    function filterCruzade(listCards) {
-        let arrayFilterCheck = filterArray(inputsChequeados, listCards)
-        let arrayFilterString = filterString(stringSearch, arrayFilterCheck)
-
-        showCard(arrayFilterString, card_index)
-    }
+    showCard(arrayFilterString, card_index)
+}
