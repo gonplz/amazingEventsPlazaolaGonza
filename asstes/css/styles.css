@@ -198,8 +198,12 @@ nav{
 }
 .container_nav_down{
     display: flex;
-    justify-content: end;
+    justify-content: start;
     flex-direction: column;
+}
+#category_nav{
+    display: flex;
+    align-items: flex-start;
 }
 footer{
     display: flex;
