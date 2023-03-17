@@ -147,6 +147,27 @@ footer{
     padding: 20px;
 }
 
+.legend_table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin: 10px 0px;
+    padding: 5px;
+    background-color: rgb(74, 99, 180);
+    border-color: rgb(0, 0, 0);
+    box-shadow: 2px 2px 2px 2px rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+tr,th,td{
+    text-align: center;
+    width: 30%;
+    height: 30%;
+}
+
 /* Media Querys ..............................................*/
 
 @media only screen and (max-width: 649px){
