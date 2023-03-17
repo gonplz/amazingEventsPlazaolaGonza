@@ -6,19 +6,16 @@ fetch(urlApi)
     .then(data => {
         console.log(data)
 
-        const tables = document.getElementById("table1")
         const eventos = data.events
         console.log(eventos)
-        cargarTabla1(eventos,tables)
+
+        const tables = document.getElementById("table1")
+        cargarTabla1(eventos, tables)
 
         const tables2 = document.getElementById("table2")
         const tables3 = document.getElementById("table3")
-        
-        calcularGanancias(eventos.filter(elemento => elemento.assistance),"Food",tables2)
-        calcularGanancias(eventos.filter(elemento => elemento.estimate),"Food",tables2)
-
-        introducirTabla2(eventos.filter(elemento => elemento.estimate),tables2)
-        introducirTabla2(eventos.filter(elemento => elemento.assistance),tables3)
+        introducirTabla2(eventos.filter(elemento => elemento.estimate), tables2)
+        introducirTabla2(eventos.filter(elemento => elemento.assistance), tables3)
 
     })
     .catch(error => console.log(error))
@@ -45,43 +42,43 @@ function cargarTabla1(array, contendor) {
 
     let trContenedor = document.createElement('tr')
     trContenedor.innerHTML = `
-        <td>${mayorAttendance.name}: ${mayorAttendance.assistance/mayorAttendance.capacity*100}%</td>
-        <td>${menorAttendance.name}: ${menorAttendance.assistance/menorAttendance.capacity*100}%</td>
+        <td>${mayorAttendance.name}: ${mayorAttendance.assistance / mayorAttendance.capacity * 100}%</td>
+        <td>${menorAttendance.name}: ${menorAttendance.assistance / menorAttendance.capacity * 100}%</td>
         <td>${mayorCapacidad.name}: ${mayorCapacidad.capacity}</td>`
-        contendor.appendChild(trContenedor)
+    contendor.appendChild(trContenedor)
 }
 
-function calcularGanancias (array,nombrecategoria){
+function calcularGanancias(array, nombrecategoria) {
 
-    let arrayFiltrado = array.filter(elemento => elemento.category == nombrecategoria).reduce((total,evento) =>{
-        if(evento.assistance != undefined) return total += evento.price * evento.assistance
+    let arrayFiltrado = array.filter(elemento => elemento.category == nombrecategoria).reduce((total, evento) => {
+        if (evento.assistance != undefined) return total += evento.price * evento.assistance
         return total += evento.price * evento.estimate
-    },0)
+    }, 0)
     return arrayFiltrado
 }
 
-function introducirTabla2 (array,contenedor){
-//  arreglo de categorias unicas
+function introducirTabla2(array, contenedor) {
+    //  arreglo de categorias unicas
     let categorias = [... new Set(array.map(elemento => elemento.category))]
 
     let fragmento = document.createDocumentFragment()
 
-    for(let categoria of categorias){
+    for (let categoria of categorias) {
         let trContenedor = document.createElement('tr')
         trContenedor.innerHTML = `<td>${categoria}</td>
-        <td>${calcularGanancias(array,categoria)}</td>
-        <td>${calcularAsistencia(array,categoria)}%</td>`
+        <td>${calcularGanancias(array, categoria)}</td>
+        <td>${calcularAsistencia(array, categoria)}%</td>`
         fragmento.appendChild(trContenedor)
     }
     contenedor.appendChild(fragmento)
 
 }
 
-function calcularAsistencia (array,nombrecategoria){
+function calcularAsistencia(array, nombrecategoria) {
 
-    let arrayFiltrado = array.filter(elemento => elemento.category == nombrecategoria).reduce((total,evento) =>{
-        if(evento.assistance != undefined) return total += evento.assistance / evento.capacity 
+    let arrayFiltrado = array.filter(elemento => elemento.category == nombrecategoria).reduce((total, evento) => {
+        if (evento.assistance != undefined) return total += evento.assistance / evento.capacity
         return total += evento.estimate / evento.capacity
-    },0)
-    return (arrayFiltrado * 100 /array.filter(elemento => elemento.category == nombrecategoria).length).toFixed(2)
+    }, 0)
+    return (arrayFiltrado * 100 / array.filter(elemento => elemento.category == nombrecategoria).length).toFixed(2)
 }
