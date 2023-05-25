@@ -1,11 +1,46 @@
-let up_coming = data.events.filter(elemento => Date.parse(elemento.date) > Date.parse(data.currentDate))
-console.log(up_coming)
+let urlApi = " https://mindhub-xj03.onrender.com/api/amazing"
 
-const card_up = document.getElementById('card_up')
+fetch(urlApi)
 
-showCard(up_coming, card_up)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+
+        //Filtro del array, para filtrar por fecha
+        let up_coming = data.events.filter(elemento => new Date(elemento.date) > new Date(data.currentDate))
+
+        //Traje los contenedores, las llamadas de las funciones y las variables gobales que pasaron a ser locales aca dentro
+
+        const card_up = document.getElementById('card_up')
+        showCard(up_coming, card_up)
+
+        const category_nav = document.getElementById('category_nav')
+        category_nav.appendChild(checkbox(up_coming))
+
+        //Checkboxes, variables, evento escucha y las llamadas
+        let inputsChequeados = []
+        let checkboxes = document.querySelectorAll('input[type=checkbox]')
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => { // trasnforme la funcion verificarChekeados en funcion flecha para utilizar las variables que eran globales, que haora osn locales dentro del fetch(then del json)
+                inputsChequeados = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id)
+                console.log(inputsChequeados)
+                filterCruzade(up_coming, inputsChequeados, stringSearch)
+            })
+        })
+        //Search, variables, evento escuha y las llamadas
+        let stringSearch = ""
+        const search_input = document.getElementById("search_input")
+        search_input.addEventListener('keyup', () => {
+            stringSearch = search_input.value
+            filterCruzade(up_coming, inputsChequeados, stringSearch)
+        })
+    })
+    .catch(error => console.log(error))
+
+//Funciones..........................
 
 function showCard(listCards, container) {
+
     container.innerHTML = ''
 
     if (listCards.length > 0) {
@@ -32,10 +67,7 @@ function showCard(listCards, container) {
     }
 }
 
-const category_nav = document.getElementById('category_nav')
-
-category_nav.appendChild(checkbox(up_coming))
-
+//Checkboxes.................
 function checkbox(array) {
 
     let arrayCate = []
@@ -55,53 +87,30 @@ function checkbox(array) {
     for (let cate of result) {
         let li = document.createElement('li')
         li.innerHTML = `<label><input type="checkbox" name="categorias" id=${cate.split(" ").join("_")}> ${cate}
-        </label>`
+            </label>`
         fragmentCheck.appendChild(li)
     }
     return fragmentCheck
 }
 
-let inputsChequeados = []
-
-let checkboxes = document.querySelectorAll('input[type=checkbox]')
-checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', verificarSeleccion)
-})
-
-function verificarSeleccion() {
-    inputsChequeados = Array.from(checkboxes).filter(checkbox => checkbox.checked).map(checkbox => checkbox.id)
-    console.log(inputsChequeados)
-    filterCruzade(up_coming)
-}
 function filterArray(arrayString, listCards) {
     if (arrayString.length == 0) return listCards
     return listCards.filter(elemento => arrayString.includes(elemento.category.replace(" ", "_")))
 }
 
-// SREEEEEAAAAAACHHHHHHHH................................................
-
-let stringSearch = ""
-
-const search_input = document.getElementById("search_input")
-console.log(search_input)
-
-search_input.addEventListener('keyup', () => {
-    stringSearch = search_input.value
-    filterCruzade(up_coming)
-})
+// Search................................................
 
 function filterString(string, listCards) {
     if (string == "") return listCards
     return listCards.filter(elemento => elemento.name.toLowerCase().includes(string.toLowerCase().trim()))
 }
 
-function filterCruzade(listCards) {
+function filterCruzade(listCards, inputsChequeados, stringSearch) {
     let arrayFilterCheck = filterArray(inputsChequeados, listCards)
     let arrayFilterString = filterString(stringSearch, arrayFilterCheck)
 
     showCard(arrayFilterString, card_up)
 }
-
 
 
 // OTRA FORMA DE HACERLO SIN DINAMISMO
