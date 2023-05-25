@@ -14,6 +14,7 @@ header{
     flex-direction: row;
     justify-content: space-around;
     padding: 20px;
+    min-height: 20vh;
 }
 .logo{
     display: flex;
@@ -92,9 +93,7 @@ main{
     justify-content: space-around;
     padding: 50px;
     background-color: rgb(212, 211, 209);
-}
-.main_details{
-    height: 553px;
+    min-height: 70vh;
 }
 .text_center{
     text-align: center;
@@ -133,6 +132,7 @@ footer{
     flex-direction: row;
     justify-content: space-around;
     align-content: center;
+    min-height: 10vh;
 
 }
 .icons_grid{
@@ -144,4 +144,44 @@ footer{
     justify-content: center;
     color: #EEEEEE;
     padding: 20px;
+}
+
+/* Media Querys */
+
+@media only screen and (max-width: 768px){
+
+main{
+    padding: 28px;
+}
+header{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.logo{
+    justify-items: center;
+    height: fit-content;
+}
+nav{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.ul_row{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    align-items: center;
+}
+.container_nav_down{
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+}
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
 }
